@@ -52,13 +52,9 @@ endef
 # recipe that copies all resources required to discover and link the shared libraries into the staging
 # directory. 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/cligen
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/cligen/*.h $(1)/usr/include/cligen/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcligen.so* $(1)/usr/lib/
 endef
-
-#	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcligen.so* $(1)/usr/lib/
 
 define Package/cligen/install
 	$(INSTALL_DIR) $(1)/usr/lib
