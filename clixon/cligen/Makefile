@@ -16,14 +16,14 @@ PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/clicon/cligen.git
-PKG_HASH:=skip
-#PKG_HASH:=9488d3a61df244f9bfcac49ac64298940f57a769e0a957c5e563b708968591bd
-PKG_MIRROR_HASH:=skip
-#PKG_SOURCE_VERSION:=5.2.0
+PKG_HASH:=ab89adc62d065680828a2e0fcd661ecf63602527b35176d87be82d225c737afd
+#PKG_MIRROR_HASH:=
+PKG_SOURCE_VERSION:=$(PKG_VERSION)
+
+# Setting it to “1” will call the package's original “make install” with prefix set to PKG_INSTALL_DIR
+PKG_INSTALL:=1
 
 PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
-
-#PKG_LICENSE_FILES:=LICENSE.md
 
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
@@ -57,15 +57,17 @@ endef
 # directory. 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/cligen
-	$(CP) $(PKG_INSTALL_DIR)/cligen*.h $(1)/usr/include/cligen/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/cligen/*.h $(1)/usr/include/cligen/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcligen.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcligen.so* $(1)/usr/lib/
 endef
 
-#define Package/cligen/install
-#	$(INSTALL_DIR) $(1)/usr/lib
-#	$(CP) $(PKG_BUILD_DIR)/libcligen.so* $(1)/usr/lib/
-#endef
+#	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcligen.so* $(1)/usr/lib/
+
+define Package/cligen/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcligen.so* $(1)/usr/lib/
+endef
 
 # This command is always the last, it uses the definitions and variables we give above in order to get the job done
 $(eval $(call BuildPackage,cligen))
