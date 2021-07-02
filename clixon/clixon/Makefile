@@ -17,7 +17,7 @@ PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/clicon/clixon.git
 PKG_HASH:=39fdcd11b4fb3e895123ffcba8772fd45fe59851589a63dc0e5ce0c3acdb1403
-#PKG_MIRROR_HASH:=
+PKG_MIRROR_HASH:=6d2b53090c7ec8ff99d037b1c3586cea6ec3233fe2f1f87f61b78820270aae5f
 
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
@@ -51,7 +51,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(call Build/Compile/Default, DESTDIR="$(PKG_INSTALL_DIR)"))
+	$(call Build/Compile/Default, DESTDIR="$(PKG_INSTALL_DIR)")
 endef
 
 # Source packages defining binary packages that ship shared libraries should declare a Build/InstallDev
@@ -59,25 +59,26 @@ endef
 # directory. 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/lib/src/libclixon.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/apps/backend/libclixon_backend.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/apps/restconf/libclixon_restconf.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/apps/netconf/libclixon_netconf.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/apps/cli/libclixon_cli.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_backend.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_restconf.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_netconf.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_cli.so* $(1)/usr/lib/
 endef
 
 define Package/clixon/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/clixon_backend $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/clixon_restconf $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/clixon_* $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/usr/bin/clixon_cli $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/usr/bin/clixon_netconf $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/lib/src/libclixon.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/apps/backend/libclixon_backend.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/apps/restconf/libclixon_restconf.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/apps/netconf/libclixon_netconf.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/apps/cli/libclixon_cli.so* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/clixon_* $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/share/clixon
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/*.yang $(1)/usr/share/clixon/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_backend.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_restconf.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_netconf.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_cli.so* $(1)/usr/lib/
 endef
 
 # This command is always the last, it uses the definitions and variables we give above in order to get the job done

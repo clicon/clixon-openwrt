@@ -8,6 +8,8 @@
 
 This repo contains an OpenWrt package feed containing clixon related libraries and applications.
 
+Note: clixon restconf is configured as native http/2-only
+
 ## Prereqs
 
 For building, you need an [openwrt buildroot](https://openwrt.org/docs/guide-developer/build-system/install-buildsystem) for your target machine.
