@@ -4,7 +4,6 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-
 include $(TOPDIR)/rules.mk
 
 # Name, version and release number
@@ -13,20 +12,18 @@ PKG_NAME:=cligen
 PKG_VERSION:=5.2.0
 # Version of packet itself
 PKG_RELEASE:=1
+PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/clicon/cligen.git
 PKG_HASH:=ab89adc62d065680828a2e0fcd661ecf63602527b35176d87be82d225c737afd
 #PKG_MIRROR_HASH:=
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
-
-# Setting it to “1” will call the package's original “make install” with prefix set to PKG_INSTALL_DIR
-PKG_INSTALL:=1
-
-PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
-
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
+
+# Call original “make install” with prefix set to PKG_INSTALL_DIR
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -49,7 +46,6 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default, DESTDIR="$(PKG_INSTALL_DIR)")
-#	(cd $(PKG_BUILD_DIR); test -h libcligen.so || ln -s libcligen.so.$(PKG_VERSION) libcligen.so)
 endef
 
 # Source packages defining binary packages that ship shared libraries should declare a Build/InstallDev
