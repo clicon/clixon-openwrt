@@ -10,11 +10,10 @@ This repo contains an OpenWrt package feed containing clixon related libraries a
 
 ## Usage
 
-To use these packages, add the following line to the feeds.conf
-in the OpenWrt buildroot:
+To use these packages, add the following line to feeds.conf in the OpenWrt buildroot:
 
 ```
-src-git clixon https://github.com/clixon/openwrt-feed.git
+src-git clixon https://github.com/clicon/openwrt-feed.git
 ```
 
 This feed should be included and enabled by default in the OpenWrt buildroot. To install all its package definitions, run:
