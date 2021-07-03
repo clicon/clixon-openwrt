@@ -7,11 +7,11 @@
 include $(TOPDIR)/rules.mk
 
 # Name, version and release number
-PKG_NAME:=clixon-hello
+PKG_NAME:=clixon-wifi
 # Upstrean version
 PKG_VERSION:=4617bfb47a3ac1010fe15ff226ad0a699efb0a01
 # Version of packet itself
-PKG_RELEASE:=3
+PKG_RELEASE:=1
 PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
 
 PKG_SOURCE_PROTO:=git
@@ -32,17 +32,17 @@ PKG_BUILD_DEPENDS:=cligen clixon
 include $(INCLUDE_DIR)/package.mk
 
 # Package definition; instructs on how and where our package will appear in the overall configuration menu ('make menuconfig')
-define Package/clixon-hello
+define Package/clixon-wifi
 	SECTION:=utils
 	CATEGORY:=Utilities
 	URL:=http://www.clixon.org
-	TITLE:=Clixon hello world
+	TITLE:=Clixon openconfig wifi application
 #	DEPENDS:=+clixon
 endef
 
 # Package description; a more verbose description on what our package does
-define Package/clixon-hello/description
-	Simple hello world application
+define Package/clixon-wifi/description
+	Clixon openconfig wifi application
 endef
 
 CONFIGURE_ARGS += --with-cligen=$(STAGING_DIR_ROOT)/usr --with-clixon=$(STAGING_DIR_ROOT)/usr
@@ -50,27 +50,30 @@ define Build/Configure
 	$(call Build/Configure/Default)
 endef
 
-# Check out all example but build only hello
-MAKE_PATH:=hello/src
+# Check out all example but build only wifi
+MAKE_PATH:=wifi/src
 define Build/Compile
 	$(call Build/Compile/Default, DESTDIR="$(PKG_INSTALL_DIR)")
 endef
 
-define Package/clixon-hello/install
-	# hello.xml needs path patch /usr/local -> /usr/
-	sed -i -e 's/\/usr\/local\/etc\/hello.xml/\/etc\/hello.xml/g' $(PKG_INSTALL_DIR)/etc/hello.xml
-	sed -i -e 's/\/usr\/local\//\/usr\//g' $(PKG_INSTALL_DIR)/etc/hello.xml
-	sed -i -e 's/<\/clixon-config>/<CLICON_SOCK_GROUP>root<\/CLICON_SOCK_GROUP>\n<\/clixon-config>/g' $(PKG_INSTALL_DIR)/etc/hello.xml
+define Package/clixon-wifi/install
+	# wifi.xml needs path patch /usr/local -> /usr/
+	sed -i -e 's/\/usr\/local\/etc\/wifi.xml/\/etc\/wifi.xml/g' $(PKG_INSTALL_DIR)/etc/wifi.xml
+	sed -i -e 's/\/usr\/local\//\/usr\//g' $(PKG_INSTALL_DIR)/etc/wifi.xml
+	sed -i -e 's/<CLICON_SOCK_GROUP>clicon/<CLICON_SOCK_GROUP>root/g' $(PKG_INSTALL_DIR)/etc/wifi.xml
+	sed -i -e 's/<CLICON_RESTCONF_USER>www-data/<CLICON_RESTCONF_USER>root/g' $(PKG_INSTALL_DIR)/etc/wifi.xml
+	sed -i -e 's/<CLICON_RESTCONF_PRIVILEGES>drop_perm/<CLICON_RESTCONF_PRIVILEGES>none/g' $(PKG_INSTALL_DIR)/etc/wifi.xml
+	sed -i -e 's/<port>80<\/port>/<port>8080<\/port>/g' $(PKG_INSTALL_DIR)/var/wifi/startup_db
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/*.xml $(1)/etc/
-	$(INSTALL_DIR) $(1)/usr/lib/hello/clispec
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/hello/clispec/*.cli $(1)/usr/lib/hello/clispec/
+	$(INSTALL_DIR) $(1)/usr/lib/wifi/clispec
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/wifi/clispec/*.cli $(1)/usr/lib/wifi/clispec/
 	$(INSTALL_DIR) $(1)/usr/share/clixon
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/*.yang $(1)/usr/share/clixon/
-	# Cant install dir into $(1)/var/hello
-	$(INSTALL_DIR) $(1)/usr/var/hello
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/var/hello/startup_db $(1)/usr/var/hello/
+	# Cant install dir into $(1)/var/wifi
+	$(INSTALL_DIR) $(1)/usr/var/wifi
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/var/wifi/startup_db $(1)/usr/var/wifi/
 endef
 
 # This command is always the last, it uses the definitions and variables we give above in order to get the job done
-$(eval $(call BuildPackage,clixon-hello))
+$(eval $(call BuildPackage,clixon-wifi))
