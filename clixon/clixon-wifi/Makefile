@@ -9,15 +9,15 @@ include $(TOPDIR)/rules.mk
 # Name, version and release number
 PKG_NAME:=clixon-wifi
 # Upstrean version
-PKG_VERSION:=4617bfb47a3ac1010fe15ff226ad0a699efb0a01
+PKG_VERSION:=79461bead615ce4c549ad401bc33bb8a165c8494
 # Version of packet itself
 PKG_RELEASE:=1
 PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/clicon/clixon-examples.git
-PKG_HASH:=77d2f1d2b94a829fa90f9b9c5f3b3faa70218396d11e7c9dd1e26ee53a4630c2
-PKG_MIRROR_HASH:=77d2f1d2b94a829fa90f9b9c5f3b3faa70218396d11e7c9dd1e26ee53a4630c2
+PKG_HASH:=52318c6b81f8214adce619a202b324e2e3255618e757b175ddbd83ef53ed167d
+PKG_MIRROR_HASH:=52318c6b81f8214adce619a202b324e2e3255618e757b175ddbd83ef53ed167d
 
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
