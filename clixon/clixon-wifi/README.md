@@ -1,5 +1,7 @@
 # Clixon openwrt wifi
 
+Openconfig YANGs from: [openconfig-wifi](https://github.com/openconfig/public/tree/master/release/models/wifi). Clixon src code from [clixon-examples wifi](https://github.com/clicon/clixon-examples/tree/master/wifi)
+
 How to (note package hash `794615` may change)
 Host:
 ```

@@ -47,7 +47,7 @@ endef
 
 CONFIGURE_ARGS += --with-restconf=native --disable-evhtp --with-cligen=$(STAGING_DIR_ROOT)/usr
 define Build/Configure
-	$(call Build/Configure/Default)
+	$(call Build/Configure/Default, INSTALLFLAGS="")
 endef
 
 define Build/Compile
@@ -58,6 +58,8 @@ endef
 # recipe that copies all resources required to discover and link the shared libraries into the staging
 # directory. 
 define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include/clixon
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/clixon/*.h $(1)/usr/include/clixon/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_backend.so* $(1)/usr/lib/

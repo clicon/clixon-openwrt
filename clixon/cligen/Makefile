@@ -40,8 +40,9 @@ define Package/cligen/description
 	CLIgen is a Command-Line Interface generator 
 endef
 
+# Dont strip on arm/bcm/pi (INSTALLFLAGS="")
 define Build/Configure
-	$(call Build/Configure/Default)
+	$(call Build/Configure/Default, INSTALLFLAGS="")
 endef
 
 define Build/Compile
@@ -52,6 +53,8 @@ endef
 # recipe that copies all resources required to discover and link the shared libraries into the staging
 # directory. 
 define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include/cligen
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/cligen/*.h $(1)/usr/include/cligen/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcligen.so* $(1)/usr/lib/
 endef
