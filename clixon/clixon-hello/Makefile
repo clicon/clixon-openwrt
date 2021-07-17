@@ -9,15 +9,16 @@ include $(TOPDIR)/rules.mk
 # Name, version and release number
 PKG_NAME:=clixon-hello
 # Upstrean version
-PKG_VERSION:=4617bfb47a3ac1010fe15ff226ad0a699efb0a01
+PKG_VERSION:=1714eb911dd91d1578af4c19d8a2ba645b039bf5
 # Version of packet itself
-PKG_RELEASE:=3
+PKG_RELEASE:=1
 PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/clicon/clixon-examples.git
 PKG_HASH:=77d2f1d2b94a829fa90f9b9c5f3b3faa70218396d11e7c9dd1e26ee53a4630c2
-PKG_MIRROR_HASH:=77d2f1d2b94a829fa90f9b9c5f3b3faa70218396d11e7c9dd1e26ee53a4630c2
+# set to skip and then make -j1 V=s package/cligen/check FIXUP=1:
+#PKG_MIRROR_HASH:=skip
 
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)

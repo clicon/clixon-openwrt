@@ -9,15 +9,17 @@ include $(TOPDIR)/rules.mk
 # Name, version and release number
 PKG_NAME:=clixon-wifi
 # Upstrean version
-PKG_VERSION:=79461bead615ce4c549ad401bc33bb8a165c8494
+PKG_VERSION:=e8b68d6414a09a790fb2e05445c539b953790465
 # Version of packet itself
 PKG_RELEASE:=1
 PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/clicon/clixon-examples.git
-PKG_HASH:=52318c6b81f8214adce619a202b324e2e3255618e757b175ddbd83ef53ed167d
-PKG_MIRROR_HASH:=52318c6b81f8214adce619a202b324e2e3255618e757b175ddbd83ef53ed167d
+
+PKG_HASH:=779e95880edd78f262989c4b0501b88f84b25d9d49a5e2112d5d71423cf8429c
+# Set to skip and run check FIXUP=1
+#PKG_MIRROR_HASH:=skip
 
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
@@ -37,7 +39,7 @@ define Package/clixon-wifi
 	CATEGORY:=Utilities
 	URL:=http://www.clixon.org
 	TITLE:=Clixon openconfig wifi application
-#	DEPENDS:=+clixon
+	DEPENDS:=+clixon
 endef
 
 # Package description; a more verbose description on what our package does
@@ -68,6 +70,8 @@ define Package/clixon-wifi/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/*.xml $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/lib/wifi/clispec
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/wifi/clispec/*.cli $(1)/usr/lib/wifi/clispec/
+	$(INSTALL_DIR) $(1)/usr/lib/wifi/backend
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/wifi/backend/*.so $(1)/usr/lib/wifi/backend/
 	$(INSTALL_DIR) $(1)/usr/share/clixon
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/*.yang $(1)/usr/share/clixon/
 	# Cant install dir into $(1)/var/wifi

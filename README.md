@@ -12,24 +12,28 @@ Note: clixon restconf is configured as native http/2-only
 
 ## Prereqs
 
-For building, you need an [openwrt buildroot](https://openwrt.org/docs/guide-developer/build-system/install-buildsystem) for your target machine.
+Setup an [openwrt buildroot](https://openwrt.org/docs/guide-developer/build-system/install-buildsystem) for your target machine.
 
 ## Building
 
-To use these packages, add the following line to feeds.conf in the OpenWrt buildroot:
+To use the clixon packages, add the following line to feeds.conf in the OpenWrt buildroot:
 
 ```
 src-git clixon https://github.com/clicon/clixon-openwrt.git
 ```
 
-This feed should be included and enabled by default in the OpenWrt buildroot. To install all its package definitions, run:
-
+The clixon-openwrt feed should be included and enabled by default in the OpenWrt buildroot. To install all its package definitions, run:
 ```
 ./scripts/feeds update clixon
 ./scripts/feeds install -a -p clixon
 ```
 
-The clixon packages should now appear in `make menuconfig` in section 'Utilities'.
+You may also need to add:
+```
+src-git packages https://git.openwrt.org/feed/packages.git
+```
+
+Run `make menuconfig` and check the clixon paackages in the section 'Utilities', and save.
 
 To build a basic clixon system on a given openwrt root build:
 ```
@@ -44,6 +48,10 @@ Thereafter the packages are copied to the target machine and installed
 ```
 scp bin/packages/x86_64/clixon/cligen_5.2.0-1_x86_64.ipk root@192.168.56.2:/tmp/
 scp bin/packages/x86_64/clixon/clixon_5.2.0-1_x86_64.ipk root@192.168.56.2:/tmp/
+```
+
+Login to the target and install the packages:
+```
 ssh root@192.168.56.2
 opkg update
 opkg install /tmp/cligen_5.2.0-1_x86_64.ipk
