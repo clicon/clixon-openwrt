@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020-2021 Olof Hagsand and Rubicon Communications, LLC(Netgate)
+# Copyright (C) 2020-2022 Olof Hagsand and Rubicon Communications, LLC(Netgate)
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -48,8 +48,9 @@ define Package/clixon-wifi/description
 endef
 
 CONFIGURE_ARGS += --with-cligen=$(STAGING_DIR_ROOT)/usr --with-clixon=$(STAGING_DIR_ROOT)/usr
+# Dont strip on arm/bcm/pi (INSTALLFLAGS="")
 define Build/Configure
-	$(call Build/Configure/Default)
+	$(call Build/Configure/Default, INSTALLFLAGS="")
 endef
 
 # Check out all example but build only wifi

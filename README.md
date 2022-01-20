@@ -16,27 +16,31 @@ You need a target system. One way is to use [virtualbox](https://openwrt.org/doc
 
 Then you need to setup an openwrt cross-compile environment:
 
-* Checkout openwrt: `git://github.com/openwrt/openwrt.git
+* Checkout openwrt: `git clone git://github.com/openwrt/openwrt.git`
 * Setup an [openwrt buildroot](https://openwrt.org/docs/guide-developer/toolchain/crosscompile) for cross-compiling
 
 ## Building
 
-To use the clixon packages, add the following line to feeds.conf in the OpenWrt buildroot. If feeds.conf does not exist, create it::
-
+To use the clixon packages, add the following line to feeds.conf in the OpenWrt buildroot. If `feeds.conf` does not exist, create it:
+```
+   src-git packages https://git.openwrt.org/feed/packages.git
    src-git clixon https://github.com/clicon/clixon-openwrt.git
+```
 
 The clixon-openwrt feed should be included and enabled by default in the OpenWrt buildroot. To install all its package definitions, run:
 ```
+  ./scripts/feeds update packages
+  ./scripts/feeds install -a -p packages
   ./scripts/feeds update clixon
   ./scripts/feeds install -a -p clixon
 ```
 
-You may also need to add:
-```
-  src-git packages https://git.openwrt.org/feed/packages.git
-```
+Run `make menuconfig` select target, and check the clixon packages (cligen, clixon, clixon-hello, clixon-wifi) in the section 'Utilities', and save.
 
-Run `make menuconfig` and check the clixon packages in the section 'Utilities', and save.
+To build a complete image:
+```
+  make -j1 V=s
+```
 
 To build a basic clixon system on a given openwrt root build:
 ```
@@ -70,7 +74,7 @@ At this point, a base clixon libs and data files are installed and you can proce
 ```
 where `xxx` is the version.
 
-Thereafter the clixon eample can run, eg:
+Thereafter the clixon example can run, eg:
 ```
   clixon_backend -f /etc/hello.xml
 ```

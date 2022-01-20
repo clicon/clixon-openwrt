@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020-2021 Olof Hagsand and Rubicon Communications, LLC(Netgate)
+# Copyright (C) 2020-2022 Olof Hagsand and Rubicon Communications, LLC(Netgate)
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 # Name, version and release number
 PKG_NAME:=clixon
 # Upstrean version
-PKG_VERSION:=5.2.0
+PKG_VERSION:=5.4.0
 # Version of packet itself
 PKG_RELEASE:=1
 PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
