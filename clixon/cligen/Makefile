@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 # Name, version and release number
 PKG_NAME:=cligen
 # Upstrean version
-PKG_VERSION:=5.4.0
+PKG_VERSION:=5.5.0
 # Version of packet itself
 PKG_RELEASE:=1
 PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
