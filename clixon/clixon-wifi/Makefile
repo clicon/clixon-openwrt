@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 # Name, version and release number
 PKG_NAME:=clixon-wifi
 # Upstrean version
-PKG_VERSION:=7cf0f7937123af3cedf7ba3d8852fbeccb9816f1
+PKG_VERSION:=HEAD
 # Version of packet itself
 PKG_RELEASE:=1
 PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
