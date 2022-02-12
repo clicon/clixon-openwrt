@@ -236,7 +236,6 @@ ssh -o StrictHostKeyChecking=no root@192.168.1.1 "(cd clixon/test; ./test_hellow
 
 # Close VM unless only run test
 if [ ${what} != test ] ; then
-    read -n 1 -p "Continue or ^C to keep VM?"
 
     VBoxManage controlvm ${VMNAME} poweroff
     sleep 2
