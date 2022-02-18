@@ -45,7 +45,7 @@ define Package/clixon/description
 	YANG-based toolchain including NETCONF and RESTCONF interfaces and an interactive CLI 
 endef
 
-CONFIGURE_ARGS += --with-restconf=native --disable-evhtp --with-cligen=$(STAGING_DIR_ROOT)/usr
+CONFIGURE_ARGS += --with-restconf=native --disable-evhtp --with-cligen=$(STAGING_DIR_ROOT)/usr --with-configfile=/etc/clixon.xml
 define Build/Configure
 	$(call Build/Configure/Default, INSTALLFLAGS="")
 endef
