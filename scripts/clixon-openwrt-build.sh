@@ -22,7 +22,7 @@ test -d ${openwrtdir} || exit -1
 # Make -j jobs
 : ${jobs=1}
 
-# This is the local feed dir (for local modifications)
+# This is the local (created) feed dir (for local modifications)
 localfeeddir=${builddir}/tmplocalfeed
 
 function usage()
@@ -114,7 +114,7 @@ make download
 
 echo "Make"
 echo "===="
-make -j{$jobs} V=s 
+make -j${jobs} V=s 
 
 sleep 1 # ensure OK is last
 echo OK
