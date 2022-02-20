@@ -19,6 +19,9 @@ test -d ${openwrtdir} || exit -1
 # Git openwrt verified tag, set TAG=HEAD for latest
 : ${TAG=3d3d03479d5b4a976cf1320d29f4bd4937d5a4ba}
 
+# Make -j jobs
+: ${jobs=1}
+
 # This is the local feed dir (for local modifications)
 localfeeddir=${builddir}/tmplocalfeed
 
@@ -111,7 +114,7 @@ make download
 
 echo "Make"
 echo "===="
-make -j1 V=s # -j2 may break the machine?
+make -j{$jobs} V=s 
 
 sleep 1 # ensure OK is last
 echo OK
