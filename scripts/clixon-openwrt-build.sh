@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # Openwrt build script for clixon
-# Prereqs:
-#   sudo apt install libncurses-dev
-set -eu
+set -eux
+
+# Set openwrt CONFIG_TARGET parameters according to make menuconfig
+# Default is x86-64
+: ${TARGET:=x86}
+: ${SUBTARGET:=64}
+: ${PROFILE:=generic}
 
 # Where build is made
-: ${builddir=$(pwd)}
+: ${builddir:=$(pwd)}
 test -d ${builddir} || exit -1
 
 # Where this script and dependent file reside
@@ -13,14 +17,14 @@ test -d ${builddir} || exit -1
 test -d ${srcdir} || exit -1
 
 # openwrt directory 
-: ${openwrtdir=${builddir}/openwrt}
+: ${openwrtdir:=${builddir}/openwrt}
 test -d ${openwrtdir} || exit -1
 
 # Git openwrt verified tag, set TAG=HEAD for latest
-: ${TAG=3d3d03479d5b4a976cf1320d29f4bd4937d5a4ba}
+: ${TAG:=3d3d03479d5b4a976cf1320d29f4bd4937d5a4ba}
 
 # Make -j jobs
-: ${jobs=1}
+: ${jobs:=1}
 
 # This is the local (created) feed dir (for local modifications)
 localfeeddir=${builddir}/tmplocalfeed
@@ -37,7 +41,10 @@ fi
 
 cd ${openwrtdir}
 
+git fetch
+
 if [ -n "${TAG}" ]; then 
+
     git checkout ${TAG}
 fi
 
@@ -81,13 +88,11 @@ echo "=============="
 # Write changes to .config
 # Create this by: ./scripts/diffconfig.sh > diffconfig (after make menuconfig; make download)
 cat<<EOF > .config
-CONFIG_TARGET_x86=y
-CONFIG_TARGET_x86_64=y
-CONFIG_TARGET_x86_64_DEVICE_generic=y
-# CONFIG_FEED_clixon is not set
-# CONFIG_FEED_local is not set
+CONFIG_TARGET_${TARGET}=y
+CONFIG_TARGET_${TARGET}_${SUBTARGET}=y
+CONFIG_TARGET_${TARGET}_${SUBTARGET}_DEVICE_${PROFILE}=y
 CONFIG_OPENSSL_ENGINE=y
-CONFIG_OPENSSL_OPTIMIZE_SPEED=y
+CONFIG_OPENSSL_OPTIMIZE_SPEED=y # maybe not on bcm27xx?
 CONFIG_OPENSSL_WITH_ASM=y
 CONFIG_OPENSSL_WITH_CHACHA_POLY1305=y
 CONFIG_OPENSSL_WITH_CMS=y

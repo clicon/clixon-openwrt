@@ -1,22 +1,30 @@
 #!/usr/bin/env bash
 # Create a virtualbox for x86_64 and install openwrt + clixon and run a test
+# Some effort has been made to make it generic using the TARGET/PROFILE variables but
+# it may not make sense to run a virtualbox on anything else that x86-64-generic?
 set -eux
 
+# Set openwrt CONFIG_TARGET parameters according to make menuconfig
+# Default is x86-64
+: ${TARGET:=x86}
+: ${SUBTARGET:=64}
+: ${PROFILE:=generic}
+
 # Where build is made
-: ${builddir=$(pwd)}
+: ${builddir:=$(pwd)}
 test -d ${builddir} || exit -1
 
 # openwrt directory 
-: ${openwrtdir=${builddir}/openwrt}
+: ${openwrtdir:=${builddir}/openwrt}
 test -d ${openwrtdir} || exit -1
 
-IMAGE=openwrt-x86-64-generic-ext4-combined.img
-sNAME=openwrtx64-clixon
+: ${DISKSIZE:='512000000'}
+: ${IMAGE:=openwrt-${TARGET}-${SUBTARGET}-${PROFILE}-ext4-combined.img}
+
+sNAME=openwrt-${TARGET}-clixon
 VDI="${sNAME}.vdi"
 VMNAME="${sNAME}"
-DISKSIZE='512000000'
-# Hardcoded to x86_64
-IMGC="${openwrtdir}/bin/targets/x86/64/${IMAGE}.gz"
+IMGC="${openwrtdir}/bin/targets/${TARGET}/${SUBTARGET}/${IMAGE}.gz"
 IPADDR=192.168.1.1 # Default virtualbox host
 
 function usage()
@@ -30,10 +38,6 @@ if [ $# -ne 0 ]; then
 fi
 
 cd ${openwrtdir}
-
-echo "    Creating VM: $VMNAME"
-echo "          Cache: ${HOME}/cache"
-echo "       Disksize: $DISKSIZE"
 
 VBoxManage controlvm ${VMNAME} poweroff || true
 sleep 2
@@ -69,24 +73,23 @@ rm -f ${VDI}
     
 gunzip --stdout "${IMGC}" | VBoxManage convertfromraw --format VDI stdin "${VDI}" $DISKSIZE 
 
-cp ${VDI} /home/olof/VirtualBox\ VMs/$VMNAME/ # XXX cant get space right
-
 VBoxManage storageattach $VMNAME \
     --storagectl "SATA Controller" \
     --port "1" \
     --type "hdd" \
     --nonrotational "on" \
-    --medium /home/olof/VirtualBox\ VMs/${VMNAME}/$VDI
+    --medium $VDI
 
 VBoxManage startvm ${VMNAME} --type headless
 
-ssh-keygen -f "/home/olof/.ssh/known_hosts" -R "${IPADDR}"
+ssh-keygen -R "${IPADDR}"
 
 echo -n "Waiting for VM to boot"
 for (( i=1; i<10; i++ )); do  
     echo -n "."
     sleep 1
-    ssh -o StrictHostKeyChecking=no root@${IPADDR} pwd > /dev/null
+    ssh -o StrictHostKeyChecking=no root@${IPADDR} pwd > /dev/null && break
+    # XXX should have terminating condition
 done
 
 cat<<EOF > ${builddir}/clixontest.sh
