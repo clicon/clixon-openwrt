@@ -119,7 +119,7 @@ make download
 
 echo "Make"
 echo "===="
-make -j${jobs} V=s 
+make -j${jobs} # V=s # enable for debug
 
 sleep 1 # ensure OK is last
 echo OK
