@@ -66,6 +66,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_restconf.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_netconf.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_cli.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/clixon_netconf $(1)/usr/bin/netconf_server
 endef
 
 define Package/clixon/install
@@ -81,6 +82,7 @@ define Package/clixon/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_restconf.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_netconf.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_cli.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/clixon_netconf $(1)/usr/bin/netconf_server
 endef
 
 # This command is always the last, it uses the definitions and variables we give above in order to get the job done
