@@ -81,7 +81,10 @@ define Package/clixon/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_restconf.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_netconf.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_cli.so* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/clixon $(1)/etc/init.d/clixon
 endef
 
 # This command is always the last, it uses the definitions and variables we give above in order to get the job done
 $(eval $(call BuildPackage,clixon))
+

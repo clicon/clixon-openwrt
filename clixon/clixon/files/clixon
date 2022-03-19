@@ -1,0 +1,12 @@
+#!/bin/sh /etc/rc.common
+
+START=95
+STOP=95
+
+start() {        
+    /usr/sbin/clixon_backend
+}                 
+ 
+stop() {          
+    /usr/sbin/clixon_backend -z
+}
