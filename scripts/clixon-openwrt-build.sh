@@ -58,13 +58,10 @@ test -d ${localfeeddir} || mkdir ${localfeeddir}
 
 git clone https://github.com/clicon/clixon-openwrt.git
 
-# Replace versions with HEAD
-test -d ${localfeeddir}/cligen || mkdir ${localfeeddir}/cligen
-cp clixon-openwrt/clixon/cligen/Makefile ${localfeeddir}/cligen/
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=HEAD/g' ${localfeeddir}/cligen/Makefile
+cp -R clixon-openwrt/clixon/* ${localfeeddir}
 
-test -d ${localfeeddir}/clixon || mkdir ${localfeeddir}/clixon
-cp clixon-openwrt/clixon/clixon/Makefile ${localfeeddir}/clixon/
+# Replace versions with HEAD
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=HEAD/g' ${localfeeddir}/cligen/Makefile
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=HEAD/g' ${localfeeddir}/clixon/Makefile
 sed -i 's/--disable-evhtp//g' ${localfeeddir}/clixon/Makefile
 
@@ -82,6 +79,9 @@ echo "=============="
 ./scripts/feeds update -a
 ./scripts/feeds update local
 ./scripts/feeds install -a -p local
+
+# Add netconf ssh subsystem patch to dropbear
+cp ${localfeeddir}/clixon/files/950-netconf-subsystem.patch ${openwrtdir}/package/network/services/dropbear/patches/
 
 # see https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem#configure_using_config_diff_file
 
