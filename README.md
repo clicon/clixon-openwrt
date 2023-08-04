@@ -35,14 +35,14 @@ The clixon-openwrt feed should be included and enabled by default in the OpenWrt
   ./scripts/feeds install -a -p clixon
 ```
 
-Run `make menuconfig` select target, and check the clixon packages (cligen, clixon, clixon-hello, clixon-wifi) in the section 'Utilities', and save.
+Run `make menuconfig` select target, and check the clixon packages (`cligen`, `clixon`, `clixon-hello`, `clixon-wifi`) in the section 'Utilities', and save.
 
 To build a complete image:
 ```
-  make -j1 V=s
+  make -j world
 ```
 
-To build a basic clixon system on a given openwrt root build:
+To build just the clixon and cligen packages on a given openwrt root build:
 ```
   make -j1 V=s package/cligen/compile
   make -j1 V=s package/clixon/compile
@@ -53,28 +53,27 @@ To build a basic clixon system on a given openwrt root build:
 Thereafter the packages are copied to the target machine and installed
 
 ```
-  scp bin/packages/x86_64/clixon/cligen_5.2.0-1_x86_64.ipk root@192.168.56.2:/tmp/
-  scp bin/packages/x86_64/clixon/clixon_5.2.0-1_x86_64.ipk root@192.168.56.2:/tmp/
+  scp bin/packages/x86_64/clixon/cligen_6.3.0-1_x86_64.ipk root@192.168.56.2:/tmp/
+  scp bin/packages/x86_64/clixon/clixon_6.3.0-1_x86_64.ipk root@192.168.56.2:/tmp/
 ```
 
 Login to the target and install the packages:
 ```
   ssh root@192.168.56.2
   opkg update
-  opkg install /tmp/cligen_5.2.0-1_x86_64.ipk
-  opkg install /tmp/clixon_5.2.0-1_x86_64.ipk
+  opkg install /tmp/cligen_6.3.0-1_x86_64.ipk
+  opkg install /tmp/clixon_6.3.0-1_x86_64.ipk
 ```
 
-At this point, a base clixon libs and data files are installed and you can proceed to install a clixon example or application, such as hello world:
+At this point, a base `clixon` libs and data files are installed and you can proceed to install a `clixon` example or application, such as hello world:
 
 ```
   make -j1 V=s package/clixon-hello/compile
   scp bin/packages/x86_64/clixon/clixon-hello*_x86_64.ipk root@192.168.56.2:/tmp/
-  opkg install /tmp/clixon-helloxxx_x86_64.ipk
+  ssh root@192.168.56.2 "opkg install /tmp/clixon-helloxxx_x86_64.ipk"
 ```
-where `xxx` is the version.
 
-Thereafter the clixon example can run, eg:
+Thereafter the `clixon` example can be run, eg:
 ```
   clixon_backend -f /etc/hello.xml
 ```

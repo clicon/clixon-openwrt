@@ -8,16 +8,15 @@ include $(TOPDIR)/rules.mk
 
 # Name, version and release number
 PKG_NAME:=clixon
-# Upstrean version
-PKG_VERSION:=5.5.0
-# Version of packet itself
+# Upstream version
+PKG_VERSION:=6.3.0
+# Version of package itself
 PKG_RELEASE:=1
 PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/clicon/clixon.git
-PKG_HASH:=39fdcd11b4fb3e895123ffcba8772fd45fe59851589a63dc0e5ce0c3acdb1403
-PKG_MIRROR_HASH:=6d2b53090c7ec8ff99d037b1c3586cea6ec3233fe2f1f87f61b78820270aae5f
+PKG_HASH:=fdfe646dc9128483acde8ce1c8968f8224ae5db3fdee727fc70db2366941e27b
 
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
@@ -37,7 +36,7 @@ define Package/clixon
 	CATEGORY:=Utilities
 	URL:=http://www.clixon.org
 	TITLE:=YANG-based toolchain
-	DEPENDS:=+cligen +libopenssl +libnghttp2
+	DEPENDS:=+cligen +libopenssl +libnghttp2 +libcurl
 endef
 
 # Package description; a more verbose description on what our package does
@@ -45,7 +44,12 @@ define Package/clixon/description
 	YANG-based toolchain including NETCONF and RESTCONF interfaces and an interactive CLI 
 endef
 
-CONFIGURE_ARGS += --with-restconf=native --disable-evhtp --with-cligen=$(STAGING_DIR_ROOT)/usr --with-configfile=/etc/clixon.xml
+CONFIGURE_ARGS += \
+	--with-restconf=native \
+	--with-configfile=/etc/clixon.xml
+
+CONFIGURE_ARGS:=$(filter-out --disable-dependency-tracking,$(CONFIGURE_ARGS))
+
 define Build/Configure
 	$(call Build/Configure/Default, INSTALLFLAGS="")
 endef
@@ -58,13 +62,14 @@ endef
 # recipe that copies all resources required to discover and link the shared libraries into the staging
 # directory. 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/clixon
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/clixon/*.h $(1)/usr/include/clixon/
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_backend.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_restconf.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_cli.so* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/clixon $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon.so* \
+	      $(PKG_INSTALL_DIR)/usr/lib/libclixon_backend.so* \
+	      $(PKG_INSTALL_DIR)/usr/lib/libclixon_restconf.so* \
+	      $(PKG_INSTALL_DIR)/usr/lib/libclixon_cli.so* \
+	      $(1)/usr/lib/
 endef
 
 define Package/clixon/install
@@ -75,10 +80,11 @@ define Package/clixon/install
 	$(INSTALL_DIR) $(1)/usr/share/clixon
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/*.yang $(1)/usr/share/clixon/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_backend.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_restconf.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon_cli.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclixon.so* \
+	      $(PKG_INSTALL_DIR)/usr/lib/libclixon_backend.so* \
+	      $(PKG_INSTALL_DIR)/usr/lib/libclixon_restconf.so* \
+	      $(PKG_INSTALL_DIR)/usr/lib/libclixon_cli.so* \
+	      $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/clixon $(1)/etc/init.d/clixon
 endef
