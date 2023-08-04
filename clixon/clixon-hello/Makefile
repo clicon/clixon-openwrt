@@ -8,9 +8,9 @@ include $(TOPDIR)/rules.mk
 
 # Name, version and release number
 PKG_NAME:=clixon-hello
-# Upstrean version
-PKG_VERSION:=1714eb911dd91d1578af4c19d8a2ba645b039bf5
-# Version of packet itself
+# Upstream version
+PKG_VERSION:=HEAD
+# Version of package itself
 PKG_RELEASE:=1
 PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
 
@@ -38,7 +38,7 @@ define Package/clixon-hello
 	CATEGORY:=Utilities
 	URL:=http://www.clixon.org
 	TITLE:=Clixon hello world
-#	DEPENDS:=+clixon
+	DEPENDS:=+clixon
 endef
 
 # Package description; a more verbose description on what our package does
@@ -46,7 +46,8 @@ define Package/clixon-hello/description
 	Simple hello world application
 endef
 
-CONFIGURE_ARGS += --with-cligen=$(STAGING_DIR_ROOT)/usr --with-clixon=$(STAGING_DIR_ROOT)/usr
+CONFIGURE_ARGS:=$(filter-out --disable-dependency-tracking,$(CONFIGURE_ARGS))
+
 define Build/Configure
 	$(call Build/Configure/Default)
 endef
@@ -59,9 +60,11 @@ endef
 
 define Package/clixon-hello/install
 	# hello.xml needs path patch /usr/local -> /usr/
-	sed -i -e 's/\/usr\/local\/etc\/hello.xml/\/etc\/hello.xml/g' $(PKG_INSTALL_DIR)/etc/hello.xml
-	sed -i -e 's/\/usr\/local\//\/usr\//g' $(PKG_INSTALL_DIR)/etc/hello.xml
-	sed -i -e 's/<\/clixon-config>/<CLICON_SOCK_GROUP>root<\/CLICON_SOCK_GROUP>\n<\/clixon-config>/g' $(PKG_INSTALL_DIR)/etc/hello.xml
+	sed -i \
+		-e 's!/usr/local/etc/hello.xml!/etc/hello.xml!g' \
+		-e 's!/usr/local/!/usr/!g' \
+		-e 's!</clixon-config>!<CLICON_SOCK_GROUP>root</CLICON_SOCK_GROUP>\n</clixon-config>!g' \
+		$(PKG_INSTALL_DIR)/etc/hello.xml
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/*.xml $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/lib/hello/clispec

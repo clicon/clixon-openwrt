@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=clixon-wifi
 # Upstrean version
 PKG_VERSION:=HEAD
-# Version of packet itself
+# Version of package itself
 PKG_RELEASE:=1
 PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
 
@@ -47,8 +47,9 @@ define Package/clixon-wifi/description
 	Clixon openconfig wifi application
 endef
 
-CONFIGURE_ARGS += --with-cligen=$(STAGING_DIR_ROOT)/usr --with-clixon=$(STAGING_DIR_ROOT)/usr
-# Dont strip on arm/bcm/pi (INSTALLFLAGS="")
+CONFIGURE_ARGS:=$(filter-out --disable-dependency-tracking,$(CONFIGURE_ARGS))
+
+# Don't strip on arm/bcm/pi (INSTALLFLAGS="")
 define Build/Configure
 	$(call Build/Configure/Default, INSTALLFLAGS="")
 endef
@@ -61,11 +62,13 @@ endef
 
 define Package/clixon-wifi/install
 	# wifi.xml needs path patch /usr/local -> /usr/
-	sed -i -e 's/\/usr\/local\/etc\/wifi.xml/\/etc\/wifi.xml/g' $(PKG_INSTALL_DIR)/etc/wifi.xml
-	sed -i -e 's/\/usr\/local\//\/usr\//g' $(PKG_INSTALL_DIR)/etc/wifi.xml
-	sed -i -e 's/<CLICON_SOCK_GROUP>clicon/<CLICON_SOCK_GROUP>root/g' $(PKG_INSTALL_DIR)/etc/wifi.xml
-	sed -i -e 's/<CLICON_RESTCONF_USER>www-data/<CLICON_RESTCONF_USER>root/g' $(PKG_INSTALL_DIR)/etc/wifi.xml
-	sed -i -e 's/<CLICON_RESTCONF_PRIVILEGES>drop_perm/<CLICON_RESTCONF_PRIVILEGES>none/g' $(PKG_INSTALL_DIR)/etc/wifi.xml
+	sed -i \
+		-e 's!/usr/local/etc/wifi.xml!/etc/wifi.xml!g' \
+		-e 's!/usr/local/!/usr/!g' \
+		-e 's!<CLICON_SOCK_GROUP>clicon!<CLICON_SOCK_GROUP>root!g' \
+		-e 's!<CLICON_RESTCONF_USER>www-data!<CLICON_RESTCONF_USER>root!g' \
+		-e 's!<CLICON_RESTCONF_PRIVILEGES>drop_perm!<CLICON_RESTCONF_PRIVILEGES>none!g' \
+		$(PKG_INSTALL_DIR)/etc/wifi.xml
 	sed -i -e 's/<port>80<\/port>/<port>8080<\/port>/g' $(PKG_INSTALL_DIR)/var/wifi/startup_db
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/*.xml $(1)/etc/
