@@ -1,0 +1,104 @@
+#
+# Copyright (C) 2020-2022 Olof Hagsand and Rubicon Communications, LLC(Netgate)
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+include $(TOPDIR)/rules.mk
+
+# Name, version and release number
+PKG_NAME:=musenki
+# Upstream version
+PKG_VERSION:=HEAD
+# Version of package itself
+PKG_RELEASE:=1
+PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
+
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://github.com/Netgate/musenki
+
+PKG_HASH:=6f8248d4e0a2c3a4b48c079b8f8490d8
+# Set to skip and run check FIXUP=1
+PKG_MIRROR_HASH:=skip
+
+PKG_SOURCE_VERSION:=$(PKG_VERSION)
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
+
+# Call original “make install” with prefix set to PKG_INSTALL_DIR
+PKG_INSTALL:=1
+
+# This is build/devel dependencies
+PKG_BUILD_DEPENDS:=cligen clixon
+
+include $(INCLUDE_DIR)/package.mk
+
+# Extra data: complete openconfig YANGs
+OPENCONFIG_ZIPFILE:=openconfig.zip
+
+define Download/openconfig
+	FILE:=28630070cbf209399fdd1ce697aea052aeb2fec4
+	URL:=https://api.github.com/repos/openconfig/public/zipball/
+	HASH:=58a141dbccc58c92db2935dc60f10e5670b36b01cf4ff86c5702511ff1f04edb
+endef
+$(eval $(call Download,openconfig))
+
+define Build/Prepare
+	$(Build/Prepare/Default)
+endef
+
+# Package definition; instructs on how and where our package will appear in the overall configuration menu ('make menuconfig')
+define Package/musenki
+	SECTION:=utils
+	CATEGORY:=Utilities
+	URL:=http://www.netgate.com
+	TITLE:=Netgate openconfig wifi application
+	DEPENDS:=+clixon
+endef
+
+# Package description; a more verbose description on what our package does
+define Package/musenki/description
+	Netgate openconfig wifi application
+endef
+
+CONFIGURE_ARGS:=$(filter-out --disable-dependency-tracking,$(CONFIGURE_ARGS))
+
+# Dont strip on arm/bcm/pi (INSTALLFLAGS="")
+define Build/Configure
+	$(call Build/Configure/Default, INSTALLFLAGS="")
+endef
+
+# Check out all example but build only musenki
+MAKE_PATH:=musenki-wifi
+define Build/Compile
+	$(call Build/Compile/Default, DESTDIR="$(PKG_INSTALL_DIR)")
+endef
+
+define Package/musenki/install
+	# musenki.xml needs path patch /usr/local -> /usr/
+#	sed -i \
+#		-e 's!/usr/local/!/usr/!g' \
+#		-e 's!<CLICON_SOCK_GROUP>clicon!<CLICON_SOCK_GROUP>root!g' \
+#		-e 's!<CLICON_RESTCONF_USER>www-data!<CLICON_RESTCONF_USER>root!g' \
+#		-e 's!<CLICON_RESTCONF_PRIVILEGES>drop_perm!<CLICON_RESTCONF_PRIVILEGES>none!g' \
+#		$(PKG_INSTALL_DIR)/etc/musenki.xml
+#	sed -i -e 's/<port>80<\/port>/<port>8080<\/port>/g' $(PKG_INSTALL_DIR)/var/musenki/startup_db
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/musenki.xml $(1)/etc/clixon.xml
+	$(INSTALL_DIR) $(1)/usr/lib/musenki/clispec
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/musenki/clispec/*.cli $(1)/usr/lib/musenki/clispec/
+	$(INSTALL_DIR) $(1)/usr/lib/musenki/backend
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/musenki/backend/*.so $(1)/usr/lib/musenki/backend/
+	$(INSTALL_DIR) $(1)/usr/share/clixon
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/*.yang $(1)/usr/share/clixon/
+	# Cant install dir into $(1)/var/musenki
+	$(INSTALL_DIR) $(1)/usr/var/musenki
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/var/musenki/startup_db $(1)/usr/var/musenki/
+	$(INSTALL_DIR) $(1)/usr/share/openconfig
+	unzip -q $(DL_DIR)/$(FILE) -d $(1)/usr/share/openconfig
+	cp -r $(1)/usr/share/openconfig/openconfig-public-* $(1)/usr/share/openconfig/public
+
+endef
+
+# This command is always the last, it uses the definitions and variables we give above in order to get the job done
+$(eval $(call BuildPackage,musenki))
