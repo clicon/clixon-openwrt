@@ -1,12 +1,26 @@
 #!/bin/sh /etc/rc.common
 
 START=95
-STOP=95
+STOP=05
 
-start() {        
-    /usr/sbin/clixon_backend
-}                 
- 
-stop() {          
-    /usr/sbin/clixon_backend -z
+USE_PROCD=1
+PROG=/usr/sbin/clixon_backend
+CONFIGFILE=/etc/clixon.xml
+
+start_service() {
+    procd_open_instance
+    procd_set_param command "$PROG"
+
+    procd_set_param file $CONFIGFILE
+
+    procd_append_param command -F
+    procd_append_param command -f $CONFIGFILE
+
+    # procd_set_param respawn
+
+    procd_close_instance
+}
+
+stop_service() {
+    service_stop "$PROG"
 }
