@@ -83,8 +83,9 @@ define Package/musenki/install
 #		-e 's!<CLICON_RESTCONF_PRIVILEGES>drop_perm!<CLICON_RESTCONF_PRIVILEGES>none!g' \
 #		$(PKG_INSTALL_DIR)/etc/musenki.xml
 #	sed -i -e 's/<port>80<\/port>/<port>8080<\/port>/g' $(PKG_INSTALL_DIR)/var/musenki/startup_db
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/musenki.xml $(1)/etc/clixon.xml
+	$(INSTALL_DIR) $(1)/etc $(1)/etc/clixon $(1)/etc/clixon/musenki
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/musenki.xml $(1)/etc/clixon
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/musenki/*.xml $(1)/etc/clixon/musenki
 	$(INSTALL_DIR) $(1)/usr/lib/musenki/clispec
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/musenki/clispec/*.cli $(1)/usr/lib/musenki/clispec/
 	$(INSTALL_DIR) $(1)/usr/lib/musenki/backend

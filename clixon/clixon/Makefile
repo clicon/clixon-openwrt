@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020-2022 Olof Hagsand and Rubicon Communications, LLC(Netgate)
+# Copyright (C) 2020-2023 Olof Hagsand and Rubicon Communications, LLC(Netgate)
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -37,6 +37,7 @@ define Package/clixon
 	URL:=http://www.clixon.org
 	TITLE:=YANG-based toolchain
 	DEPENDS:=+cligen +libopenssl +libnghttp2 +libcurl
+	USERID:=clicon=61:clicon=61
 endef
 
 # Package description; a more verbose description on what our package does
@@ -73,6 +74,7 @@ define Build/InstallDev
 endef
 
 define Package/clixon/install
+	$(INSTALL_DIR) $(1)/etc/clixon
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/clixon_* $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -86,7 +88,7 @@ define Package/clixon/install
 	      $(PKG_INSTALL_DIR)/usr/lib/libclixon_cli.so* \
 	      $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/clixon $(1)/etc/init.d/clixon
+	$(INSTALL_BIN) ./files/clixon.init $(1)/etc/init.d/clixon
 endef
 
 # This command is always the last, it uses the definitions and variables we give above in order to get the job done
