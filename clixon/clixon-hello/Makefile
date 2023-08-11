@@ -63,10 +63,9 @@ define Package/clixon-hello/install
 	sed -i \
 		-e 's!/usr/local/etc/hello.xml!/etc/hello.xml!g' \
 		-e 's!/usr/local/!/usr/!g' \
-		-e 's!<CLICON_SOCK_GROUP>clicon<!<CLICON_SOCK_GROUP>root<!' \
-		$(PKG_INSTALL_DIR)/etc/hello.xml
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/*.xml $(1)/etc/
+		$(PKG_INSTALL_DIR)/etc/clixon/hello.xml
+	$(INSTALL_DIR) $(1)/etc/clixon/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/*.xml $(1)/etc/clixon
 	$(INSTALL_DIR) $(1)/usr/lib/hello/clispec
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/hello/clispec/*.cli $(1)/usr/lib/hello/clispec/
 	$(INSTALL_DIR) $(1)/usr/share/clixon
