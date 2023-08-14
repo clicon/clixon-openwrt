@@ -66,6 +66,11 @@ define Package/clixon-openconfig/description
 	Simple openconfig application
 endef
 
+CONFIGURE_ARGS+=\
+		--localstatedir=/usr/var \
+		--with-clicon-user=clicon \
+		--with-clicon-group=clicon
+
 CONFIGURE_ARGS:=$(filter-out --disable-dependency-tracking,$(CONFIGURE_ARGS))
 
 # Check out all examples but build only hello
@@ -74,11 +79,6 @@ define Build/Compile
 endef
 
 define Package/clixon-hello/install
-	# hello.xml needs path patch /usr/local -> /usr/
-	sed -i \
-		-e 's!/usr/local/etc/clixon/hello!/etc/clixon/hello!g' \
-		-e 's!/usr/local/!/usr/!g' \
-		$(PKG_INSTALL_DIR)/etc/clixon/hello.xml
 	$(INSTALL_DIR) $(1)/etc/clixon/ $(1)/etc/clixon/hello
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/hello.xml $(1)/etc/clixon
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/hello/{autocli,restconf}.xml $(1)/etc/clixon/hello
@@ -88,7 +88,7 @@ define Package/clixon-hello/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/clixon-hello@*.yang $(1)/usr/share/clixon/
 	# Cant install dir into $(1)/var/hello
 	$(INSTALL_DIR) $(1)/usr/var/hello
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/var/hello/startup_db $(1)/usr/var/hello/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/var/hello/startup_db $(1)/usr/var/hello/
 endef
 
 define Package/clixon-hello/conffiles
@@ -97,11 +97,6 @@ define Package/clixon-hello/conffiles
 endef
 
 define Package/clixon-wifi/install
-	# hello.xml needs path patch /usr/local -> /usr/
-	sed -i \
-		-e 's!/usr/local/etc/clixon/wifi!/etc/clixon/wifi!g' \
-		-e 's!/usr/local/!/usr/!g' \
-		$(PKG_INSTALL_DIR)/etc/clixon/wifi.xml
 	$(INSTALL_DIR) $(1)/etc/clixon/ $(1)/etc/clixon/wifi
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/wifi.xml $(1)/etc/clixon
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/wifi/autocli.xml $(1)/etc/clixon/wifi
@@ -111,7 +106,7 @@ define Package/clixon-wifi/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/clixon-wifi@*.yang $(1)/usr/share/clixon/
 	# Cant install dir into $(1)/var/wifi
 	$(INSTALL_DIR) $(1)/usr/var/wifi
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/var/wifi/startup_db $(1)/usr/var/wifi/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/var/wifi/startup_db $(1)/usr/var/wifi/
 endef
 
 define Package/clixon-wifi/conffiles
@@ -120,11 +115,6 @@ define Package/clixon-wifi/conffiles
 endef
 
 define Package/clixon-openconfig/install
-	# hello.xml needs path patch /usr/local -> /usr/
-	sed -i \
-		-e 's!/usr/local/etc/clixon/openconfig!/etc/clixon/openconfig!g' \
-		-e 's!/usr/local/!/usr/!g' \
-		$(PKG_INSTALL_DIR)/etc/clixon/openconfig.xml
 	$(INSTALL_DIR) $(1)/etc/clixon/ $(1)/etc/clixon/openconfig
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/openconfig.xml $(1)/etc/clixon
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/openconfig/autocli.xml $(1)/etc/clixon/openconfig
@@ -134,7 +124,7 @@ define Package/clixon-openconfig/install
 	# $(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/clixon-openconfig@*.yang $(1)/usr/share/clixon/
 	# Cant install dir into $(1)/var/openconfig
 	$(INSTALL_DIR) $(1)/usr/var/openconfig
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/var/openconfig/startup_db $(1)/usr/var/openconfig/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/var/openconfig/startup_db $(1)/usr/var/openconfig/
 endef
 
 define Package/clixon-openconfig/conffiles

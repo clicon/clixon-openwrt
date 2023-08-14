@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020-2022 Olof Hagsand and Rubicon Communications, LLC(Netgate)
+# Copyright (C) 2020-2023 Olof Hagsand and Rubicon Communications, LLC(Netgate)
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -61,6 +61,11 @@ define Package/musenki/description
 	Netgate openconfig wifi application
 endef
 
+CONFIGURE_ARGS+=\
+		--localstatedir=/usr/var \
+		--with-clicon-user=clicon \
+		--with-clicon-group=clicon
+
 CONFIGURE_ARGS:=$(filter-out --disable-dependency-tracking,$(CONFIGURE_ARGS))
 
 # Dont strip on arm/bcm/pi (INSTALLFLAGS="")
@@ -75,13 +80,6 @@ define Build/Compile
 endef
 
 define Package/musenki/install
-	# musenki.xml needs path patch /usr/local -> /usr/
-#	sed -i \
-#		-e 's!/usr/local/!/usr/!g' \
-#		-e 's!<CLICON_SOCK_GROUP>clicon!<CLICON_SOCK_GROUP>root!g' \
-#		-e 's!<CLICON_RESTCONF_USER>www-data!<CLICON_RESTCONF_USER>root!g' \
-#		-e 's!<CLICON_RESTCONF_PRIVILEGES>drop_perm!<CLICON_RESTCONF_PRIVILEGES>none!g' \
-#		$(PKG_INSTALL_DIR)/etc/musenki.xml
 #	sed -i -e 's/<port>80<\/port>/<port>8080<\/port>/g' $(PKG_INSTALL_DIR)/var/musenki/startup_db
 	$(INSTALL_DIR) $(1)/etc $(1)/etc/clixon $(1)/etc/clixon/musenki
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/musenki.xml $(1)/etc/clixon
@@ -94,7 +92,7 @@ define Package/musenki/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/*.yang $(1)/usr/share/clixon/
 	# Cant install dir into $(1)/var/musenki
 	$(INSTALL_DIR) $(1)/usr/var/musenki
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/var/musenki/startup_db $(1)/usr/var/musenki/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/var/musenki/startup_db $(1)/usr/var/musenki/
 	$(INSTALL_DIR) $(1)/usr/share/openconfig
 	unzip -q $(DL_DIR)/$(FILE) -d $(1)/usr/share/openconfig
 	cp -r $(1)/usr/share/openconfig/openconfig-public-* $(1)/usr/share/openconfig/public
