@@ -36,7 +36,7 @@ define Package/clixon
 	CATEGORY:=Utilities
 	URL:=http://www.clixon.org
 	TITLE:=YANG-based toolchain
-	DEPENDS:=+cligen +libopenssl +libnghttp2 +libcurl
+	DEPENDS:=+cligen +libopenssl +libnghttp2 +libcurl +libxml2-utils
 	USERID:=clicon=61:clicon=61
 endef
 
