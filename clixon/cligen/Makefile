@@ -17,6 +17,7 @@ PKG_MAINTAINER:=Olof Hagsand <olof@hagsand.se>
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/clicon/cligen.git
 PKG_HASH:=71781c8f7923659b6d1dd276686949e0c099797e938337e68e8dd84931981c1d
+
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
@@ -38,6 +39,8 @@ endef
 define Package/cligen/description
 	CLIgen is a Command-Line Interface generator 
 endef
+
+CONFIGURE_ARGS:=$(filter-out --disable-dependency-tracking,$(CONFIGURE_ARGS))
 
 # Don't strip on arm/bcm/pi (INSTALLFLAGS="")
 define Build/Configure
