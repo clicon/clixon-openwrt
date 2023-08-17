@@ -36,7 +36,8 @@ define Package/clixon
 	CATEGORY:=Utilities
 	URL:=http://www.clixon.org
 	TITLE:=YANG-based toolchain
-	DEPENDS:=+cligen +libopenssl +libnghttp2 +libcurl +libxml2-utils
+	DEPENDS:=+cligen +libopenssl +libnghttp2 +libcurl +libxml2-utils \
+		 @(PACKAGE_openssh-server||PACKAGE_openssh-server-pam)
 	USERID:=clicon=61:clicon=61
 endef
 
@@ -89,6 +90,8 @@ define Package/clixon/install
 	      $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/clixon.init $(1)/etc/init.d/clixon
+	$(INSTALL_DIR) $(1)/etc/ssh/sshd_config.d
+	$(INSTALL_DATA) -m 0600 ./files/netconf-subsystem.conf $(1)/etc/ssh/sshd_config.d/90-netconf-subsystem.conf
 endef
 
 # This command is always the last, it uses the definitions and variables we give above in order to get the job done
