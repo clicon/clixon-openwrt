@@ -84,8 +84,8 @@ define Package/clixon-hello/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/hello/{autocli,restconf}.xml $(1)/etc/clixon/hello
 	$(INSTALL_DIR) $(1)/usr/lib/hello/clispec
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/hello/clispec/*.cli $(1)/usr/lib/hello/clispec/
-	$(INSTALL_DIR) $(1)/usr/share/clixon
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/clixon-hello@*.yang $(1)/usr/share/clixon/
+	$(INSTALL_DIR) $(1)/usr/share/clixon/hello
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/hello/clixon-hello@*.yang $(1)/usr/share/clixon/hello
 	# Cant install dir into $(1)/var/hello
 	$(INSTALL_DIR) $(1)/usr/var/hello
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/var/hello/startup_db $(1)/usr/var/hello/
@@ -102,8 +102,8 @@ define Package/clixon-wifi/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/wifi/autocli.xml $(1)/etc/clixon/wifi
 	$(INSTALL_DIR) $(1)/usr/lib/wifi/clispec
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/wifi/clispec/*.cli $(1)/usr/lib/wifi/clispec/
-	$(INSTALL_DIR) $(1)/usr/share/clixon
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/clixon-wifi@*.yang $(1)/usr/share/clixon/
+	$(INSTALL_DIR) $(1)/usr/share/clixon/wifi
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/wifi/clixon-wifi@*.yang $(1)/usr/share/clixon/wifi
 	# Cant install dir into $(1)/var/wifi
 	$(INSTALL_DIR) $(1)/usr/var/wifi
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/var/wifi/startup_db $(1)/usr/var/wifi/
@@ -120,8 +120,8 @@ define Package/clixon-openconfig/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/clixon/openconfig/autocli.xml $(1)/etc/clixon/openconfig
 	$(INSTALL_DIR) $(1)/usr/lib/openconfig/clispec
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/openconfig/clispec/*.cli $(1)/usr/lib/openconfig/clispec/
-	$(INSTALL_DIR) $(1)/usr/share/clixon
-	# $(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/clixon-openconfig@*.yang $(1)/usr/share/clixon/
+	$(INSTALL_DIR) $(1)/usr/share/clixon/openconfig
+	# $(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/clixon/openconfig/clixon-openconfig@*.yang $(1)/usr/share/clixon/openconfig
 	# Cant install dir into $(1)/var/openconfig
 	$(INSTALL_DIR) $(1)/usr/var/openconfig
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/var/openconfig/startup_db $(1)/usr/var/openconfig/
