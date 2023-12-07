@@ -4,6 +4,8 @@
 
 # Clixon openwrt feed
 
+_This repository has been obsoleted in favor of git://github.com/openwrt/packages.git which now includes both Cligen and Clixon._
+
 ## Description
 
 This repo contains an OpenWrt package feed containing clixon related libraries and applications.
